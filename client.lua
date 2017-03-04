@@ -45,8 +45,12 @@ AddEventHandler('es_freeroam:spawnPlayer', function(x, y, z, model)
     -- Display notification
 RegisterNetEvent("es_freeroam:notify")
 AddEventHandler("es_freeroam:notify", function(icon, type, sender, title, text)
+  Citizen.CreateThread(function()
+  Wait(1)
   SetNotificationTextEntry("STRING");
+  PlaySoundFrontend(-1, "OTHER_TEXT", "HUD_AWARDS", 0)
   AddTextComponentString(text);
-  SetNotificationMessage(type, type, true, type, sender, title, text);
+  SetNotificationMessage(icon, icon, true, type, sender, title, text);
   DrawNotification(false, true);
+ end)
 end)

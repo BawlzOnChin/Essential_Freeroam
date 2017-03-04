@@ -11,7 +11,6 @@ AddEventHandler('playerSpawn', function()
 end)
 
 
-
 AddEventHandler('es:playerLoaded', function(source)
 	-- Get the players money amount
 TriggerEvent('es:getPlayerFromId', source, function(user)
@@ -19,9 +18,8 @@ TriggerEvent('es:getPlayerFromId', source, function(user)
 TriggerClientEvent('es:activateMoney', source, tonumber(user.money))
 TriggerClientEvent('chatMessage', source, "^1SYSTEM", {187, 235, 42}, "Welcome to FiveM Essential Freeroam")
 TriggerClientEvent('chatMessage', source, "^1SYSTEM", {187, 235, 42}, "Use /help for all available commands")
--- AddEventHandler("es_freeroam:notify", function(icon, sender, title, text)
-TriggerClientEvent("es_freeroam:notify", source, "CHAR_SOCIAL_CLUB", "Maze Bank", "v0.1.0", "Your money is now available")
-
+-- AddEventHandler("es_freeroam:notify", function(icon, type, sender, title, text)
+TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your current cash is ~y~$".. tonumber(user.money))
 -- TriggerClientEvent('chatMessage', source, "SYSTEM", {187, 235, 42}, "Your money amount is: $" .. tonumber(user.money))
 	end)
 end)
@@ -58,7 +56,8 @@ end)
 -- 911 CALL
 TriggerEvent('es:addAdminCommand', '911', permission.default, function(source, args, user)
 	table.remove(args, 1)
-	TriggerClientEvent('chatMessage', -1, "^5[911]", {30, 144, 255}, " (^1 Caller ID: ^3" .. GetPlayerName(source) .." | "..source.."^0 ) " .. table.concat(args, " "))
+ 	TriggerClientEvent('chatMessage', -1, "^5[911]", {30, 144, 255}, " (^1 Caller ID: ^3" .. GetPlayerName(source) .." | "..source.."^0 ) " .. table.concat(args, " "))
+	TriggerClientEvent("es_freeroam:notify", source, "CHAR_CALL911", 1, "911 Emergency", "Confirmation", "We received your call, an officer will arrive shortly")
 end, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
 end)
@@ -81,7 +80,8 @@ TriggerEvent('es:addAdminCommand', 'setmoney', permission.admin, function(source
 					TriggerClientEvent('es:activateMoney', tonumber(args[2]), tonumber(args[3]))
 
 					if(success)then
-			    TriggerClientEvent("es_freeroam:displaytext", source, "Your money has been set to ~g~$" .. tonumber(args[3]), 5000)
+						TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your money has been set to ~g~$".. tonumber(args[3]))
+			    -- TriggerClientEvent("es_freeroam:displaytext", source, "Your money has been set to ~g~$" .. tonumber(args[3]), 5000)
 					end
 				end)
 
@@ -109,7 +109,8 @@ TriggerEvent('es:addAdminCommand', 'addmoney', permission.admin, function(source
 				TriggerEvent("es:setPlayerData", tonumber(args[2]), "money", tonumber(total), function(response, success)
 					TriggerClientEvent('es:activateMoney', tonumber(args[2]), tonumber(total))
 					if(success)then
-			    TriggerClientEvent("es_freeroam:displaytext", source, "Your money has been updated to ~g~$" .. tonumber(total), 5000)
+					TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your money has been updated to ~g~$".. tonumber(total))
+			    -- TriggerClientEvent("es_freeroam:displaytext", source, "Your money has been updated to ~g~$" .. tonumber(total), 5000)
 					end
 				end)
 
