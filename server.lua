@@ -109,6 +109,7 @@ TriggerEvent('es:addAdminCommand', 'addmoney', permission.admin, function(source
 				TriggerEvent("es:setPlayerData", tonumber(args[2]), "money", tonumber(total), function(response, success)
 					TriggerClientEvent('es:activateMoney', tonumber(args[2]), tonumber(total))
 					if(success)then
+					Wait(0)
 					TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your money has been updated to ~g~$".. tonumber(total))
 			    -- TriggerClientEvent("es_freeroam:displaytext", source, "Your money has been updated to ~g~$" .. tonumber(total), 5000)
 					end
