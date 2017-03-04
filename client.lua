@@ -21,6 +21,18 @@ AddEventHandler('es_freeroam:spawnPlayer', function(x, y, z, model)
     exports.spawnmanager:spawnPlayer({x = x, y = y, z = z, model = model})
   end)
 
+  AddEventHandler("playerSpawned", function(spawn)
+    Citizen.CreateThread(function()
+    while true do
+      Wait(0)
+      SetNotificationTextEntry("STRING");
+      AddTextComponentString("You can now use /help to view all available commands");
+      SetNotificationMessage("CHAR_MULTIPLAYER", "CHAR_MULTIPLAYER", true, 1, "Essential Freeroam", "v0.1.0");
+      DrawNotification(false, true);
+      Wait(200000)
+    end
+   end)
+  end)
   -- Display text
     RegisterNetEvent("es_freeroam:displaytext")
     AddEventHandler("es_freeroam:displaytext", function(text, time)
@@ -31,10 +43,10 @@ AddEventHandler('es_freeroam:spawnPlayer', function(x, y, z, model)
     end)
 
     -- Display notification
-    RegisterNetEvent("es_freeroam:notify")
-    AddEventHandler("es_freeroam:notify", function(type, text, title, subtitle)
-      SetNotificationTextEntry("STRING");
-      AddTextComponentString(text);
-      SetNotificationMessage(type, type, true, 1, title, subtitle);
-      DrawNotification(false, true);
-    end)
+RegisterNetEvent("es_freeroam:notify")
+AddEventHandler("es_freeroam:notify", function(icon, type, sender, title, text)
+  SetNotificationTextEntry("STRING");
+  AddTextComponentString(text);
+  SetNotificationMessage(type, type, true, type, sender, title, text);
+  DrawNotification(false, true);
+end)
