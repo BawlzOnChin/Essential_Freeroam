@@ -1,4 +1,4 @@
-# Essential_Freeroam v0.1.0
+# Essential_Freeroam v0.1.1
 <a href="https://discord.gg/eNJraMf"><img alt="Discord Status" src="https://discordapp.com/api/guilds/285462938691567627/widget.png"></a>
 
 Open freeroam with Essential Mode
@@ -13,6 +13,7 @@ Open freeroam with Essential Mode
 ## Requirements
 
 - [Essentialmode](https://forum.fivem.net/t/release-essentialmode-base/3665)
+- If you get stuck on the loading screen then verify that you have essentialMode in your map __resource
 
 ## Installation
 
