@@ -15,30 +15,30 @@ AddEventHandler('es:playerLoaded', function(source)
 	-- Get the players money amount
 TriggerEvent('es:getPlayerFromId', source, function(user)
 
-TriggerClientEvent('es:activateMoney', source, tonumber(user.money))
-TriggerClientEvent('chatMessage', source, "^1SYSTEM", {187, 235, 42}, "Welcome to FiveM Essential Freeroam")
-TriggerClientEvent('chatMessage', source, "^1SYSTEM", {187, 235, 42}, "Use /help for all available commands")
--- AddEventHandler("es_freeroam:notify", function(icon, type, sender, title, text)
-TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your current cash is ~y~$".. tonumber(user.money))
--- TriggerClientEvent('chatMessage', source, "SYSTEM", {187, 235, 42}, "Your money amount is: $" .. tonumber(user.money))
+-- TriggerClientEvent('es:activateMoney', source, tonumber(user.money))
+TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your current cash balance is ~g~$".. tonumber(user.money))
 	end)
 end)
 
 --Help Commands
 TriggerEvent('es:addCommand', 'help', function(source, args, user)
-  TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/911 <message> - to call 911")
+  TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/911 <message> - Call 911")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/cash - Get your current money balance")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/pay <id> <money> - Pay another player")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/permissions - Check your permission level")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "-------------------------------------------------------")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/adminhelp to show admin and staff commands")
 end)
 
 TriggerEvent('es:addCommand', 'adminhelp', function(source, args, user)
   TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/dispatch <message> - Respond to the 911 call")
-  TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/arrest <id> - arrest the player")
+  TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/arrest <id> - Arrest the player")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "-------------------------------------------------------")
-	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/goto <id> -  teleport to the player")
-	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/bring <id> - teleport the player to you")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/goto <id> -  Teleport to the player")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/bring <id> - Teleport the player to you")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "-------------------------------------------------------")
-	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/ban <id>  - ban a player")
-	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/kick <id> - to kick a player")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/ban <id>  - Ban a player")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/kick <id> - Kick a player")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "-------------------------------------------------------")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/setmoney <id> <money> - Set the money amount for a player")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/addmoney <id> <money> - Give more money to the player")
@@ -61,6 +61,50 @@ TriggerEvent('es:addAdminCommand', '911', permission.default, function(source, a
 end, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
 end)
+
+TriggerEvent('es:addCommand', 'permission', function(source, args, user)
+	local level = tonumber(user.permission_level)
+
+				if(level == 0)then
+					name = "Player"
+				elseif(level == 1)then
+					name = "Staff"
+				elseif(level == 2)then
+					name = "Administrator"
+				end
+
+	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Your permission level is: ^2" .. name)
+end)
+
+  TriggerEvent('es:addCommand', 'cash', function(source, args, user)
+		TriggerEvent('es:getPlayerFromId', source, function(user)
+		TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your current cash is ~y~$".. tonumber(user.money))
+			end)
+	end)
+
+	TriggerEvent('es:addCommand', 'pay', function(source, args, user)
+     local player = tonumber(args[2])
+
+		TriggerEvent('es:getPlayerFromId', source, function(user)
+      -- Balance check
+			if(tonumber(user.money) <= tonumber(args[3])) then
+			TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "~r~You don't have enough money.");
+				else
+		totalPlayer = tonumber(user.money) - tonumber(args[3]);
+  	TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", "Payment done", "Your money balance has been changed to ~y~$".. tonumber(totalPlayer))
+
+		TriggerEvent("es:getPlayerFromId", player, function(target)
+				TriggerEvent("es:setPlayerData", tonumber(args[2]), "money", tonumber(args[3]), function(response, success)
+				if(success)then
+					TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your just received ~g~$".. tonumber(args[3]) .. "\n")
+				end
+			end)
+		end)
+	 end
+ end)
+end)
+
+
 
 
 -- Set money to the players account
