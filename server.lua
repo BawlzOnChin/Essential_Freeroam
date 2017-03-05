@@ -23,9 +23,11 @@ end)
 --Help Commands
 TriggerEvent('es:addCommand', 'help', function(source, args, user)
   TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/911 <message> - Call 911")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "-------------------------------------------------------")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/cash - Get your current money balance")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/pay <id> <money> - Pay another player")
-	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/permissions - Check your permission level")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "-------------------------------------------------------")
+	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/permission - Check your permission level")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "-------------------------------------------------------")
 	TriggerClientEvent("chatMessage", source, "^1SYSTEM", {255, 255, 255}, "/adminhelp to show admin and staff commands")
 end)
@@ -92,15 +94,15 @@ end)
 				else
 		totalPlayer = tonumber(user.money) - tonumber(args[3]);
   	TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", "Payment done", "Your money balance has been changed to ~y~$".. tonumber(totalPlayer))
-
+	 end
 		TriggerEvent("es:getPlayerFromId", player, function(target)
 				TriggerEvent("es:setPlayerData", tonumber(args[2]), "money", tonumber(args[3]), function(response, success)
 				if(success)then
-					TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your just received ~g~$".. tonumber(args[3]) .. "\n")
+					TriggerClientEvent("es_freeroam:notify", player, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your just received ~g~$".. tonumber(args[3]) .. "\n")
 				end
 			end)
 		end)
-	 end
+
  end)
 end)
 
@@ -121,10 +123,10 @@ TriggerEvent('es:addAdminCommand', 'setmoney', permission.admin, function(source
 
 				TriggerEvent("es:setPlayerData", tonumber(args[2]), "money", tonumber(args[3]), function(response, success)
 
-					TriggerClientEvent('es:activateMoney', tonumber(args[2]), tonumber(args[3]))
+--					TriggerClientEvent('es:activateMoney', tonumber(args[2]), tonumber(args[3]))
 
 					if(success)then
-						TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your money has been set to ~g~$".. tonumber(args[3]))
+						TriggerClientEvent("es_freeroam:notify", player, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Your money has been set to ~g~$".. tonumber(args[3]))
 			    -- TriggerClientEvent("es_freeroam:displaytext", source, "Your money has been set to ~g~$" .. tonumber(args[3]), 5000)
 					end
 				end)

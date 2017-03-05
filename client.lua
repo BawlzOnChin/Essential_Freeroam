@@ -26,12 +26,32 @@ AddEventHandler('es_freeroam:spawnPlayer', function(x, y, z, model)
     while true do
       Wait(0)
       SetNotificationTextEntry("STRING");
-      AddTextComponentString("You can now use /help to view all available commands.\n ~y~For more info go to github.com/FiveM-Scripts");
+      AddTextComponentString("Use /help to view all available commands.\n ~y~For more info go to github.com/FiveM-Scripts");
       SetNotificationMessage("CHAR_ALL_PLAYERS_CONF", "CHAR_ALL_PLAYERS_CONF", true, 1, "Essential Freeroam", "v0.1.1");
       DrawNotification(false, true);
-      Wait(200000)
+      Wait(500000)
     end
    end)
+
+  -- Give dead peds money to pickup
+   Citizen.CreateThread(function()
+	while true do
+		Wait(0)
+		   local pos = GetEntityCoords(GetPlayerPed(-1));
+			 local cashped = GetRandomPedAtCoord(pos['x'], pos['y'], pos['z'], 9.0, 9.0, 9.0,9.0, 26);
+			 if  cashped ~= nil and DoesEntityExist(cashped) then
+				 SetEntityAsMissionEntity(cashped,0,0);
+				 FreezeEntityPosition(cashped,0);
+				 SetPedMoney(cashped, GetRandomIntInRange(10, 100));
+
+			 if IsPedFatallyInjured(cashped) then
+					CreateMoneyPickups(cashped.x+50.0, cashped.y+50.0, cashped.z+5.0, cMoney, 4, 0x684a97ae);
+					SetEntityAsNoLongerNeeded(cashped);
+			 end
+
+		end
+	end
+end)
   end)
 
 
