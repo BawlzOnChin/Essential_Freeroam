@@ -15,6 +15,6 @@ client_scripts {
 }
 
 server_scripts {
-	'server.lua',
-  'player/commands.lua'
+'server.lua',
+  'commands.lua'
 }
