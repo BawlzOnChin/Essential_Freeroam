@@ -2,26 +2,11 @@
 AddEventHandler('onClientMapStart', function()
     exports.spawnmanager:setAutoSpawn(true)
     exports.spawnmanager:forceRespawn()
-
-    exports.spawnmanager:setAutoSpawnCallback(function()
-        if spawnLock then
-            return
-        end
-
-      --  spawnLock = true
-
-        TriggerServerEvent('playerSpawn')
-        TriggerEvent('playerSpawn')
-    end)
 end)
 
--- Allows the server to spawn the player
-RegisterNetEvent('es_freeroam:spawnPlayer')
-AddEventHandler('es_freeroam:spawnPlayer', function(x, y, z, model)
-    exports.spawnmanager:spawnPlayer({x = x, y = y, z = z, model = model})
-  end)
 
   AddEventHandler("playerSpawned", function(spawn)
+    -- Send notifications
     Citizen.CreateThread(function()
     while true do
       Wait(0)
@@ -31,28 +16,20 @@ AddEventHandler('es_freeroam:spawnPlayer', function(x, y, z, model)
       DrawNotification(false, true);
       Wait(500000)
     end
-   end)
 
-  -- Give dead peds money to pickup
-   Citizen.CreateThread(function()
-	while true do
-		Wait(0)
-		   local pos = GetEntityCoords(GetPlayerPed(-1));
-			 local cashped = GetRandomPedAtCoord(pos['x'], pos['y'], pos['z'], 9.0, 9.0, 9.0,9.0, 26);
-			 if  cashped ~= nil and DoesEntityExist(cashped) then
-				 SetEntityAsMissionEntity(cashped,0,0);
-				 FreezeEntityPosition(cashped,0);
-				 SetPedMoney(cashped, GetRandomIntInRange(10, 100));
-
-			 if IsPedFatallyInjured(cashped) then
-					CreateMoneyPickups(cashped.x+50.0, cashped.y+50.0, cashped.z+5.0, cMoney, 4, 0x684a97ae);
-					SetEntityAsNoLongerNeeded(cashped);
-			 end
-
+    local playerPed = GetPlayerPed(-1);
+    if (IsPedModel(playerPed, GetHashKey("player_zero"))) then
+			model = 0
+		elseif (IsPedModel(playerPed, GetHashKey("player_one"))) then
+			model = 1
+		elseif (IsPedModel(playerPed, GetHashKey("player_two"))) then
+			model = 2
 		end
-	end
-end)
-  end)
+		local statname = "SP"..model.."_TOTAL_CASH"
+		local hash = GetHashKey(statname)
+		local bool, val = StatGetInt(hash, 0, -1)
+   end)
+ end)
 
 
   -- Display text
