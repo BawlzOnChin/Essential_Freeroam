@@ -11,10 +11,10 @@ dependency 'essentialmode'
 -- General
 client_scripts {
   'client.lua',
-  'stores/stores.lua'
+  'stores.lua'
 }
 
 server_scripts {
 'server.lua',
-  'commands.lua'
+ 'commands.lua'
 }
